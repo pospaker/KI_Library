@@ -24,10 +24,8 @@ namespace KINT_Lib
 
         public DBJob(string str_DB_Name)
         {
-            //
-            // TODO: 여기에 생성자 논리를 추가합니다.
-            //
-
+            
+            //TEST
             this.sqlConnection = new System.Data.OleDb.OleDbConnection();
             this.sqlConnection.ConnectionString = sDBConnect + str_DB_Name;
 
