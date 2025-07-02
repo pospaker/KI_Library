@@ -19,6 +19,7 @@ namespace KINT_Lib
             _serialPort = new SerialPort(portName, baudRate);
             _serialPort.Encoding = Encoding.UTF8;
             _serialPort.DataReceived += SerialPort_DataReceived;
+
         }
 
         // 포트 열기
