@@ -11,7 +11,8 @@ namespace KINT_Lib
         // 델리게이트 정의
         public delegate void DataReceivedHandler(string data);
 
-        // 이벤트 선언
+        // 이벤트 
+        
         public event DataReceivedHandler OnDataReceived;
 
         public Lib_SerialPort(string portName, int baudRate = 9600)

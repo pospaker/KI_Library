@@ -122,7 +122,7 @@ namespace KINT_Lib
             {
                 Console.WriteLine(err.Message);
                 throw new Exception(err.Message);
-                return null;
+                
             }
         }
 
