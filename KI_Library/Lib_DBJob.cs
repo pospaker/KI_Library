@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Linq;
 //using System.Windows.Forms;
 
@@ -205,6 +206,33 @@ namespace KINT_Lib
 
 
 
+        public string GetSqlWithParameters(OleDbCommand command)
+        {
+            string sql = command.CommandText;
+
+            foreach (OleDbParameter param in command.Parameters)
+            {
+                string paramValue;
+
+                if (param.Value == DBNull.Value || param.Value == null)
+                {
+                    paramValue = "NULL";
+                }
+                else if (param.Value is string || param.Value is DateTime)
+                {
+                    paramValue = $"'{param.Value.ToString().Replace("'", "''")}'"; // 문자열/날짜는 따옴표 처리
+                }
+                else
+                {
+                    paramValue = param.Value.ToString(); // 숫자 등은 그대로
+                }
+
+                sql = sql.Replace(param.ParameterName, paramValue);
+            }
+
+            return sql;
+        }
+
         // added by kdg. 250424
         // INSERT 쿼리 실행 함수
         public bool InsertData(string tableName, Dictionary<string, object> data)
@@ -224,6 +252,14 @@ namespace KINT_Lib
                     sqlCommand.Parameters.AddWithValue("@" + item.Key, item.Value ?? DBNull.Value);
                 }
 
+                foreach (var kvp in data)
+                {
+                    if (kvp.Value is string str)
+                    {
+                        Console.WriteLine($"{kvp.Key} : {str.Length} chars");
+                    }
+                }
+                Console.WriteLine(GetSqlWithParameters(sqlCommand));
                 return sqlCommand.ExecuteNonQuery() > 0;
             }
             catch (Exception ex)
@@ -247,7 +283,6 @@ namespace KINT_Lib
                 {
                     sqlCommand.Parameters.AddWithValue("@" + item.Key, item.Value ?? DBNull.Value);
                 }
-
                 return sqlCommand.ExecuteNonQuery() > 0;
             }
             catch (Exception ex)
@@ -255,7 +290,5 @@ namespace KINT_Lib
                 throw new Exception("[UpdateData] " + ex.Message);
             }
         }
-
-
     }
 }
